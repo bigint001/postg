@@ -10,6 +10,13 @@ db_pass = os.getenv("DB_PASS")
 db_host = os.getenv("DB_HOST")
 db_port = os.getenv("DB_PORT")
 
+schema_users = """ 
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL
+);"""
+
 def main():
     db = DB(
         dbname=db_name,
@@ -19,6 +26,9 @@ def main():
         port=db_port
     )
     db.connect()
+    db.create_table(schema_users)
+
+
 
 if __name__ == "__main__":
     main()

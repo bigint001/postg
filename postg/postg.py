@@ -14,7 +14,7 @@ class DB:
         self.connection = None
         self.cursor = None
 
-
+#connection to DB
     def connect(self):
         try:
             self.connection = psycopg2.connect(
@@ -24,10 +24,19 @@ class DB:
                 host=self.host,
                 port=self.port
             )
-
             self.cursor = self.connection.cursor(cursor_factory=RealDictCursor)
             print(f"CONNECTED TO: '{self.dbname}' ON: {self.host}:{self.port}")
 
         except Exception as e:
             print(f"Connection error: {e}")
+
+#create table
+    def create_table(self, schema: str):
+        try:
+            self.cursor.execute(schema)
+            self.connection.commit()
+            print(f"[+] Table created successfully (or already exists)")
+        except Exception as e:
+            print(f"[!] Error creating table: {e}")
+            self.connection.rollback()
 
