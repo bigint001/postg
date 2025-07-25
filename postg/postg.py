@@ -56,8 +56,9 @@ class DB:
             return True
 
         except Exception as e:
-                print(f"[!] Error inserting into {table}: {e}")
-                return False
+            print(f"[!] Error inserting into {table}: {e}")
+            self.connection.rollback()
+            return False
 
     # method select
     def select(self, table: str, filters: dict = None):
@@ -70,6 +71,7 @@ class DB:
                 for key, value in filters.items():
                     conditions.append(f"{key} = %s")
                     params.append(value)
+
                 where_clause = " AND ".join(conditions)
                 query += f" WHERE {where_clause}"
 
@@ -79,6 +81,31 @@ class DB:
             cursor.close()
 
             return result
+
         except Exception as e:
             print(f"Error selecting from {table}: {e}")
             return []
+
+    # method update
+    def update(self, table: str, filters: dict = None, data: dict = None):
+        try:
+            set_clause = ', '.join([f"{key} = %s" for key in data.keys()])
+            set_values = list(data.values())
+
+            where_clause = " AND ".join([f"{key} = %s" for key in filters.keys()])
+            where_values = list(filters.values())
+
+            query = f"UPDATE {table} SET {set_clause} WHERE {where_clause}"
+            values = set_values + where_values
+
+            with self.connection.cursor() as cursor:
+                cursor.execute(query, values)
+                self.connection.commit()
+
+            print(f"[✓] Updated {table} where {filters} with {data}")
+            return True
+
+        except Exception as e:
+            print(f"[!] Error updating {table}: {e}")
+            self.connection.rollback()
+            return False
