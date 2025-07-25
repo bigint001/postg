@@ -2,7 +2,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 
 
-# Класс DB с базовым функционалом
+# Class DB with basic functionality
 
 class DB:
     def __init__(self, dbname, user, password, host, port):
@@ -109,3 +109,23 @@ class DB:
             print(f"[!] Error updating {table}: {e}")
             self.connection.rollback()
             return False
+
+    # method delete
+    def delete(self, table: str, filters: dict = None):
+        try:
+            where_clause = " AND ".join(f"{key} = %s" for key in filters.keys())
+            values = list(filters.values())
+            query = f"DELETE FROM {table} WHERE {where_clause}"
+
+            with self.connection.cursor() as cursor:
+                cursor.execute(query, values)
+                self.connection.commit()
+
+            print(f"[✓] Deleted from {table} where {filters}")
+            return True
+
+        except Exception as e:
+            print(f"[!] Error deleting from {table}: {e}")
+            self.connection.rollback()
+            return False
+
