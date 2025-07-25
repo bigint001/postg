@@ -1,6 +1,7 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
+
 # Класс DB с базовым функционалом
 
 class DB:
@@ -39,6 +40,25 @@ class DB:
             print(f"[!] Error creating table: {e}")
             self.connection.rollback()
 
+    # method insert
+    def insert(self, table: str, data: dict):
+        try:
+            columns = ", ".join(data.keys())
+            placeholders = ", ".join(['%s'] * len(data))
+            values = list(data.values())
+
+            query = f"INSERT INTO {table} ({columns}) VALUES ({placeholders})"
+
+            with self.connection.cursor() as cursor:
+                cursor.execute(query, values)
+                self.connection.commit()
+            print(f"[✓] Inserted into {table}: {data}")
+            return True
+
+        except Exception as e:
+                print(f"[!] Error inserting into {table}: {e}")
+                return False
+
     # method select
     def select(self, table: str, filters: dict = None):
         try:
@@ -62,4 +82,3 @@ class DB:
         except Exception as e:
             print(f"Error selecting from {table}: {e}")
             return []
-
