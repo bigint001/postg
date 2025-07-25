@@ -28,6 +28,8 @@ def main():
     db.connect()
     db.create_table(schema_users)
 
+    select_users = db.select("users")
+    print(select_users)
 
 
 if __name__ == "__main__":
