@@ -148,3 +148,22 @@ class DB:
         except Exception as e:
             print(f"[!] Error counting rows in {table}: {e}")
             return 0
+
+    # method query
+    def query(self, sql: str, params: tuple = None):
+        try:
+            with self.connection.cursor(cursor_factory=RealDictCursor) as cursor:
+                cursor.execute(sql, params)
+
+                if cursor.description:
+                    result = cursor.fetchall()
+                    return result
+                else:
+                    self.connection.commit()
+                    return True
+
+        except Exception as e:
+            print(f"[!] Error executing query: {e}")
+            self.connection.rollback()
+            return False
+
