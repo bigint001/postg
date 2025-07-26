@@ -1,6 +1,6 @@
 # postg.py
 
-https://pypi.org/project/postg-q/0.1.0/
+https://pypi.org/project/postg-q/0.1.2/
 
 A minimal PostgreSQL database utility class using `psycopg2` with basic methods for interacting with a PostgreSQL database.
 
