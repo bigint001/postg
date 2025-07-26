@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name='postg',
+    name='postg-q',
     version='0.1.0',
     description='Minimal PostgreSQL utility with psycopg2',
     long_description=open('README.md').read(),
