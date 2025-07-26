@@ -24,7 +24,7 @@ A minimal PostgreSQL database utility class using `psycopg2` with basic methods 
 ## Installation
 
 ```bash
-pip install postg
+pip install postg-q
 
 
 ## Docs

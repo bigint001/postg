@@ -166,4 +166,5 @@ class DB:
             print(f"[!] Error executing query: {e}")
             self.connection.rollback()
             return False
+__all__ = ['DB']
 
