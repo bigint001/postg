@@ -129,3 +129,22 @@ class DB:
             self.connection.rollback()
             return False
 
+    # method count
+    def count(self, table: str, filters: dict = None):
+        try:
+            query = f"SELECT COUNT(*) FROM {table}"
+            values = []
+
+            if filters:
+                where_clause = " AND ".join(f"{key} = %s" for key in filters.keys())
+                query += f" WHERE {where_clause}"
+                values = list(filters.values())
+
+            with self.connection.cursor() as cursor:
+                cursor.execute(query, values)
+                result = cursor.fetchone()
+                return result[0]
+
+        except Exception as e:
+            print(f"[!] Error counting rows in {table}: {e}")
+            return 0
