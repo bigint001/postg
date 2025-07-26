@@ -15,7 +15,7 @@ A minimal PostgreSQL database utility class using `psycopg2` with basic methods 
 
 ## Requirements
 
-- Python 3.7+
+- Python 3.11+
 - psycopg2
 - python-dotenv (optional, for loading env variables)
 
